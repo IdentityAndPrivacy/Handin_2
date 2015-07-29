@@ -4,11 +4,49 @@
 // =============================================================================
 
 // Setup the packages that we need
-var express    = require('express'), 
-	exphbs     = require('express-handlebars');        // call express
-var app        = express();                 // define our app using express
-var bodyParser = require('body-parser');
-var url = require('url') ;
+var express    	= require('express'), 
+	exphbs     	= require('express-handlebars');        // call express
+var app        	= express();                 // define our app using express
+var bodyParser 	= require('body-parser');
+var url 	   	= require('url') ;
+var mongoose  	= require('mongoose');
+
+// MongoDB
+var uristring =
+process.env.MONGOLAB_URI ||
+process.env.MONGOHQ_URL ||
+'mongodb://localhost/HelloMongoose';
+
+mongoose.connect(uristring, function (err, res) {
+  if (err) {
+  console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+  } else {
+  console.log ('Succeeded connected to: ' + uristring);
+  }
+});
+
+var appSchema = new mongoose.Schema({
+    clientId: String,
+    redirectUrl: String
+});
+
+var PApp = mongoose.model('Apps', appSchema);
+
+// Clear out old data
+PApp.remove({}, function(err) {
+  if (err) {
+    console.log ('error deleting old data.');
+  }
+});
+
+// Creating one user.
+var client1 = new PApp ({
+  clientId: 'A22d2fg224h98k8D7HH21',
+  redirectUrl: ''
+});
+
+// Saving it to the database.  
+client1.save(function (err) {if (err) console.log ('Error on save!')});
 
 // Setup view engine
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
