@@ -63,6 +63,7 @@ router.post('/authorize', function(req, res) {
 		var url = redirectUrl + '?authCode=' + authCode;	
 		res.writeHead(302, { Location: url});
 		res.end();
+		redirectUrl = '';
 	}
 	
 });
