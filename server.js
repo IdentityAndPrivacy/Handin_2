@@ -3,10 +3,16 @@
 // BASE SETUP
 // =============================================================================
 
-// call the packages we need
+// Setup the packages that we need
 var express    = require('express');        // call express
 var app        = express();                 // define our app using express
 var bodyParser = require('body-parser');
+
+// Hardcoded stuff
+var clientId = 'A22d2fg224h98k8D7HH21';
+var token = 'ii9hD7yw8ao9ereDh34aer93db';
+var experation = new Date();
+experation.setHours(experation.getHours()+1);
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -25,13 +31,21 @@ router.get('/', function(req, res) {
 });
 
 router.post('/login', function(req, res) {
-	if (req.body.name === 'kasper') {
-		res.json({ message: 'Authenticated', token: 'assa#34asasdas343443'});  
+	if (req.body.clientId === clientId) {
+		res.json({ message: 'Authenticated', token: token, expires: experation});  
 	}
 	else {
 		res.json({ message: 'Go away!' }); 
 	}	
 })
+
+
+router.post('/token-validation', function(req, res) {
+	if(req.body.token === token)
+	{
+		res.json({ message: 'token is valid'});
+	}
+});
 
 // more routes for our API will happen here
 
