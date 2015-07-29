@@ -10,7 +10,7 @@
 
 
 
-<form action="/authorize" method="post">
+<form onsubmit="self.close();" action="/authorize" method="post">
 	<div class="row">
 	 <div class="input-field col s10 offset-s1">
           <input id="username" name="username" type="text" class="validate">
@@ -26,7 +26,7 @@
 
 <div class="row">
 <div class="input-field col s10 offset-s1">
-  <input onClick="self.close();" class="btn" style="width: 100%" type="submit" value="Login">
+  <input class="btn" style="width: 100%" type="submit" value="Login">
 </div>
 </div>
 
