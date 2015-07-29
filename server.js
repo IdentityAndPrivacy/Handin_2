@@ -17,6 +17,8 @@ app.set('view engine', 'handlebars');
 // Hardcoded stuff
 var clientId = 'A22d2fg224h98k8D7HH21';
 var token = 'ii9hD7yw8ao9ereDh34aer93db';
+var username = 'username';
+var password = 'password';
 var experation = new Date();
 experation.setHours(experation.getHours()+1);
 
@@ -39,8 +41,13 @@ router.get('/login', function(req, res) {
 });
 
 router.post('/authorize', function(req, res) {
-	console.log(req.body.username);
-	console.log(req.body.password);
+	
+	var fUsername = req.body.username;
+	var fPassword = req.body.password;
+
+	if(fUsername === username && fPassword === password) {
+		alert('YAY!!!!');
+	}
 	// if (req.body.clientId === clientId) {
 	// 	res.json({ message: 'Authenticated', token: token, expires: experation});  
 	// }
