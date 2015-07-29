@@ -80,6 +80,14 @@ router.get('/login', function(req, res) {
 	var rClientId = url.parse(req.url,true).query.clientId;
 	redirectUrl = url.parse(req.url,true).query.redirectUrl;
 	
+	PApp.findOne({}).exec(function(err, app) {
+  	if (!err) {
+    	console.log(app.clientId);
+  	} else {
+    // error handling
+  	};
+	});
+
 	console.log('RClientId: ' + rClientId);
 	console.log('RRedirectUrl: ' + redirectUrl);
 
