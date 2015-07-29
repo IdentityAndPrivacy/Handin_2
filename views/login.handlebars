@@ -1,8 +1,21 @@
 <h1>KaMaNi OAuth 2.0 login provider</h1>
 <img src='/images/logo.png'>
 
+<div class="container">
 <form action="/authorize" method="post">
-  Username: <input type="text" name="username"><br>
-  Password: <input type="text" name="password"><br>
-  <input type="submit" value="Submit">
+	<div class="row">
+	 <div class="input-field col s4 offset-s4">
+          <input id="username" name="username" type="text" class="validate">
+          <label for="username">Username</label>
+      </div>
+  </div>
+  <div class="row">
+	 <div class="input-field col s4 offset-s4">
+          <input id="password" name="password" type="password" class="validate">
+          <label for="password">Password</label>
+      </div>
+  </div>
+
+  <input type="submit" value="Login">
 </form>
+</div>
