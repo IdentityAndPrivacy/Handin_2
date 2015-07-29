@@ -16,6 +16,8 @@ app.set('view engine', 'handlebars');
 
 // Hardcoded stuff
 var clientId = 'A22d2fg224h98k8D7HH21';
+var authCode = 'k5dfD09asYyt9ak8d23as';
+var redirectUrl = '';
 var token = 'ii9hD7yw8ao9ereDh34aer93db';
 var username = 'username';
 var password = 'password';
@@ -27,6 +29,8 @@ experation.setHours(experation.getHours()+1);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+app.use('/images', express.static(__dirname + "/images"));
+
 var port = process.env.PORT || 8080;        // set our port
 
 // ROUTES FOR OUR API
@@ -35,9 +39,19 @@ var router = express.Router();              // get an instance of the express Ro
 
 // test route to make sure everything is working (accessed at GET http://localhost:8080/api)
 router.get('/login', function(req, res) {
-	var receivedClientId = url.parse(req.url,true).query.clientId;
-	console.log('RClientId: ' + receivedClientId);
-    res.render('login');   
+	var rClientId = url.parse(req.url,true).query.clientId;
+	redirectUrl = url.parse(req.url,true).query.redirectUrl;
+	
+	console.log('RClientId: ' + rClientId);
+	console.log('RRedirectUrl: ' + redirectUrl);
+
+	if(rClientId === clientId) {
+		res.render('login'); 
+	}
+	else {
+		//res.writeHead(302, { Location: redirectUrl});
+		//res.end();
+	}    
 });
 
 router.post('/authorize', function(req, res) {
@@ -46,25 +60,39 @@ router.post('/authorize', function(req, res) {
 	var fPassword = req.body.password;
 
 	if(fUsername === username && fPassword === password) {
-		alert('YAY!!!!');
+		var url = redirectUrl + '?authCode=' + authCode;	
+		res.writeHead(302, { Location: url});
+		res.end();
 	}
-	// if (req.body.clientId === clientId) {
-	// 	res.json({ message: 'Authenticated', token: token, expires: experation});  
-	// }
-	// else {
-	// 	res.json({ message: 'Go away!' }); 
-	// }	
-})
+	
+});
 
-
-router.post('/token-validation', function(req, res) {
-	if(req.body.token === token)
-	{
-		res.json({ message: 'token is valid'});
+router.get('/request-token', function(req, res){
+	var rAuthCode = url.parse(req.url,true).query.authCode;
+	if(rAuthCode === authCode){
+		res.json({token: token, expires: experation});
+	}
+	else {
+		res.status(421);
+		res.json({error: 'AuthCode incorrect'});
+		res.end();
 	}
 });
 
-// more routes for our API will happen here
+
+router.get('/token-validation', function(req, res) {
+	var rToken = url.parse(req.url,true).query.token;
+	if(rToken === token)
+	{
+		res.status(200);
+		res.end();
+	}
+	else{
+		res.status(421);
+		res.end();
+	}
+});
+
 
 // REGISTER OUR ROUTES -------------------------------
 // all of our routes will be prefixed with /api
