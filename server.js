@@ -49,8 +49,8 @@ router.get('/login', function(req, res) {
 		res.render('login'); 
 	}
 	else {
-		//res.writeHead(302, { Location: redirectUrl});
-		//res.end();
+		res.status(421);
+		res.end();
 	}    
 });
 
