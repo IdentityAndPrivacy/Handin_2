@@ -57,7 +57,7 @@ function login(){
     }
   })
   .done(function(data){
-    window.opener.postMessage(data.redirectUrl, 'http://pi-client-server.herokuapp.com/');
+    window.opener.postMessage(data.redirectUrl, 'https://pi-client-server.herokuapp.com/');
 
 
     //window.opener.location.document.location.href = data.redirectUrl;
