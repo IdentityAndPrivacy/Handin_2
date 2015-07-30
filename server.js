@@ -125,6 +125,8 @@ router.post('/authorize', function(req, res) {
 	var fUsername = req.body.username;
 	var fPassword = req.body.password;
 
+	var _res = res;
+
 	var query = PUser.findOne({'username': fUsername});
 	query.exec(function(err, user) {
 		if (!err) {
@@ -133,19 +135,19 @@ router.post('/authorize', function(req, res) {
 		  	{
 		  		console.log('Verified');
 		  		var url = redirectUrl + '?authCode=' + authCode;
-				res.status(200);
-				res.json({redirectUrl: url});
-				res.end();
+				_res.status(200);
+				_res.json({redirectUrl: url});
+				_res.end();
 		  	}
 		  	else{
-		  		res.status(401);
-		  		res.json({message: 'Wrong password'})
-		  		res.end();
+		  		_res.status(401);
+		  		_res.json({message: 'Wrong password'})
+		  		_res.end();
 		  	}
 		} else {
-			res.status(401);
-		  	res.json({message: 'Wrong username'})
-		  	res.end();
+			_res.status(401);
+		  	_res.json({message: 'Wrong username'})
+		  	_res.end();
 		}
   });
 });
