@@ -10,6 +10,7 @@ var app        	= express();                 // define our app using express
 var bodyParser 	= require('body-parser');
 var url 	   	= require('url') ;
 var mongoose  	= require('mongoose');
+var passwordHash = require('password-hash');
 
 // MongoDB
 var uristring =
@@ -25,28 +26,57 @@ mongoose.connect(uristring, function (err, res) {
   }
 });
 
-var appSchema = new mongoose.Schema({
-    clientId: String,
-    redirectUrl: String
+var userSchema = new mongoose.Schema({
+    username: String,
+    password: String,
+    name:{
+  		firstname: String,
+  		lastname: String
+  }
 });
 
-var PApp = mongoose.model('Apps', appSchema);
+var PUser = mongoose.model('Users', userSchema);
 
-// Clear out old data
-PApp.remove({}, function(err) {
+PUser.remove({}, function(err) {
   if (err) {
     console.log ('error deleting old data.');
   }
 });
 
-// Creating one user.
-var client1 = new PApp ({
-  clientId: 'A22d2fg224h98k8D7HH21',
-  redirectUrl: ''
+var martin = new PUser ({
+  username: 'martin',
+  password: passwordHash.generate('123'),
+  name:{
+  	firstname: 'Martin',
+  	lastname: 'Jensen'
+  }
 });
 
+
+var nikolas = new PUser ({
+  username: 'nikolas',
+  password: passwordHash.generate('111'),
+  name:{
+  	firstname: 'Nikolas',
+  	lastname: 'Bram'
+  }
+});
+
+
+var kasper = new PUser ({
+  username: 'kasper',
+  password: passwordHash.generate('112'),
+  name:{
+  	firstname: 'Kasper',
+  	lastname: 'Nissen'
+  }
+});
+
+
 // Saving it to the database.  
-client1.save(function (err) {if (err) console.log ('Error on save!')});
+martin.save(function (err) {if (err) console.log ('Error on save!')});
+nikolas.save(function (err) {if (err) console.log ('Error on save!')});
+kasper.save(function (err) {if (err) console.log ('Error on save!')});
 
 // Setup view engine
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
@@ -79,17 +109,6 @@ var router = express.Router();              // get an instance of the express Ro
 router.get('/login', function(req, res) {
 	var rClientId = url.parse(req.url,true).query.clientId;
 	redirectUrl = url.parse(req.url,true).query.redirectUrl;
-	
-	PApp.findOne({}).exec(function(err, app) {
-  	if (!err) {
-    	console.log(app.clientId);
-  	} else {
-    // error handling
-  	};
-	});
-
-	console.log('RClientId: ' + rClientId);
-	console.log('RRedirectUrl: ' + redirectUrl);
 
 	if(rClientId === clientId) {
 		res.render('login'); 
@@ -102,22 +121,30 @@ router.get('/login', function(req, res) {
 
 router.post('/authorize', function(req, res) {
 
-	console.log(req.body.username);	
 	var fUsername = req.body.username;
 	var fPassword = req.body.password;
 
-
-
-	if(fUsername === username && fPassword === password) {
-		var url = redirectUrl + '?authCode=' + authCode;
-		res.status(200);
-		res.json({redirectUrl: url});
-		res.end();
-
-		//res.writeHead(302, { Location: url});
-		//res.end();
-	}
-	
+	var query = PUser.findOne({'username': fUsername});
+	query.exec(function(err, user) {
+    if (!err) {
+      if(passwordHash.verify(fPassword, user.password))
+      	{
+      		var url = redirectUrl + '?authCode=' + authCode;
+			res.status(200);
+			res.json({redirectUrl: url});
+			res.end();
+      	}
+      	else{
+      		res.status(401);
+      		res.json({message: 'Wrong password'})
+      		res.end();
+      	}
+    } else {
+    	res.status(401);
+      	res.json({message: 'Wrong username'})
+      	res.end();
+    }
+  });
 });
 
 router.get('/request-token', function(req, res){
