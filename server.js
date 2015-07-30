@@ -214,7 +214,7 @@ router.get('/me', function(req, res){
 
 	query.exec(function(err, user) {
 		if (!err) {
-			console.log(user);
+			console.log(user.name.firstname);
 			_res.json({
 				user:{
 					firstname: user.name.firstname, 
