@@ -211,8 +211,10 @@ router.get('/me', function(req, res){
 	var rToken = url.parse(req.url,true).query.token;
 	var query = PUser.findOne({'token': rToken});
 	var _res = res;
+
 	query.exec(function(err, user) {
 		if (!err) {
+			console.log(user);
 			_res.json({
 				user:{
 					firstname: user.name.firstname, 
