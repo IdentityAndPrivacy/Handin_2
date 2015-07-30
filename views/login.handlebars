@@ -57,10 +57,8 @@ function login(){
     }
   })
   .done(function(data){
-    window.onunload = refreshParent;
-    function refreshParent() {
-        window.opener.location.document.location.href = data.redirectUrl;
-    }})
+    window.opener.location.document.location.href = data.redirectUrl;
+    self.close();
   .fail(function(){alert('Fail');});
 
 }
