@@ -60,7 +60,7 @@ function login(){
     window.opener.postMessage(data.redirectUrl, 'http://pi-client-server.herokuapp.com/');
 
 
-    window.opener.location.document.location.href = data.redirectUrl;
+    //window.opener.location.document.location.href = data.redirectUrl;
     self.close();
   })
   .fail(function(){alert('Fail');});
