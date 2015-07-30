@@ -5,9 +5,7 @@
     "express": "~4.0.0",
     "mongoose": "~3.6.13",
     "body-parser": "~1.0.1",
-    "express-handlebars": "2.0.1"
-  },
-  "devDependencies": {
+    "express-handlebars": "2.0.1",
     "password-hash": "^1.2.2"
   }
 }

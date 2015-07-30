@@ -3,7 +3,7 @@
 // BASE SETUP
 // =============================================================================
 
-// Setup the packages that we need
+	// Setup the packages that we need
 var express    	= require('express'), 
 	exphbs     	= require('express-handlebars');        // call express
 var app        	= express();                 // define our app using express
@@ -11,6 +11,7 @@ var bodyParser 	= require('body-parser');
 var url 	   	= require('url') ;
 var mongoose  	= require('mongoose');
 var passwordHash = require('password-hash');
+var crypto = require('crypto');
 
 // MongoDB
 var uristring =
@@ -126,24 +127,24 @@ router.post('/authorize', function(req, res) {
 
 	var query = PUser.findOne({'username': fUsername});
 	query.exec(function(err, user) {
-    if (!err) {
-      if(passwordHash.verify(fPassword, user.password))
-      	{
-      		var url = redirectUrl + '?authCode=' + authCode;
-			res.status(200);
-			res.json({redirectUrl: url});
-			res.end();
-      	}
-      	else{
-      		res.status(401);
-      		res.json({message: 'Wrong password'})
-      		res.end();
-      	}
-    } else {
-    	res.status(401);
-      	res.json({message: 'Wrong username'})
-      	res.end();
-    }
+		if (!err) {
+		  if(passwordHash.verify(fPassword, user.password))
+		  	{
+		  		var url = redirectUrl + '?authCode=' + authCode;
+				res.status(200);
+				res.json({redirectUrl: url});
+				res.end();
+		  	}
+		  	else{
+		  		res.status(401);
+		  		res.json({message: 'Wrong password'})
+		  		res.end();
+		  	}
+		} else {
+			res.status(401);
+		  	res.json({message: 'Wrong username'})
+		  	res.end();
+		}
   });
 });
 
