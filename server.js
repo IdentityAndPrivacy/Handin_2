@@ -246,8 +246,16 @@ router.get('/token-validation', function(req, res) {
 	var query = PUser.findOne({'token': rToken});
 	query.exec(function(err, user) {
 		if (!err) {
-			_res.status(200);
-			_res.end();
+			if(user !== null)
+			{
+				_res.status(200);
+				_res.end();
+			}
+			else {
+				_res.status(421);
+				_res.json({error: 'Token not found'});
+				_res.end();
+			}
 		}
 		else {
 			_res.status(421);
