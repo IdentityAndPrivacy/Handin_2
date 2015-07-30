@@ -101,14 +101,21 @@ router.get('/login', function(req, res) {
 });
 
 router.post('/authorize', function(req, res) {
-	
+
+	console.log(req.body.username);	
 	var fUsername = req.body.username;
 	var fPassword = req.body.password;
 
+
+
 	if(fUsername === username && fPassword === password) {
-		var url = redirectUrl + '?authCode=' + authCode;	
-		res.writeHead(302, { Location: url});
+		var url = redirectUrl + '?authCode=' + authCode;
+		res.status(200);
+		res.json({redirectUrl: url});
 		res.end();
+
+		//res.writeHead(302, { Location: url});
+		//res.end();
 	}
 	
 });
