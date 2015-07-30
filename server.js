@@ -128,6 +128,7 @@ router.post('/authorize', function(req, res) {
 	var query = PUser.findOne({'username': fUsername});
 	query.exec(function(err, user) {
 		if (!err) {
+			console.log.(user);
 		  if(passwordHash.verify(fPassword, user.password))
 		  	{
 		  		console.log('Verified');
