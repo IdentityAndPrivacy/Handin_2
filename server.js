@@ -183,14 +183,13 @@ router.get('/request-token', function(req, res){
 
 	var _res = res;
 
-
 	var query = PUser.findOne({'authCode': rAuthCode});
 	query.exec(function(err, user) {
 		if (!err) {
 			var current_date = (new Date()).valueOf().toString();
 			var random = Math.random().toString();
 			var gToken = crypto.createHash('sha1').update(current_date + random).digest('hex');
-			console.log(user);
+			console.log(user.token);
 			console.log(gToken);
 			if(user.token !== null)
 			{
