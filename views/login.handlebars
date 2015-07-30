@@ -60,8 +60,7 @@ function login(){
     window.onbeforeunload = function() {
       window.opener.postMessage(data.redirectUrl, 'https://pi-client-server.herokuapp.com/');
     };
-    window.unload = function(){
-    };
+    window.close();
     
 
 
