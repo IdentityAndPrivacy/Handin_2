@@ -69,6 +69,17 @@ var nikolas = new PUser ({
   }
 });
 
+var gert = new PUser ({
+  username: 'gert',
+  password: passwordHash.generate('password'),
+  token: '',
+  authCode: '',
+  name:{
+  	firstname: 'Gert',
+  	lastname: 'Mikkelsen'
+  }
+});
+
 
 var kasper = new PUser ({
   username: 'kasper',
