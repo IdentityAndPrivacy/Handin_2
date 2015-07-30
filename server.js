@@ -30,6 +30,8 @@ mongoose.connect(uristring, function (err, res) {
 var userSchema = new mongoose.Schema({
     username: String,
     password: String,
+    token: String,
+    authCode: String,
     name:{
   		firstname: String,
   		lastname: String
@@ -47,6 +49,8 @@ PUser.remove({}, function(err) {
 var martin = new PUser ({
   username: 'martin',
   password: passwordHash.generate('123'),
+  token: '',
+  authCode: '',
   name:{
   	firstname: 'Martin',
   	lastname: 'Jensen'
@@ -57,6 +61,8 @@ var martin = new PUser ({
 var nikolas = new PUser ({
   username: 'nikolas',
   password: passwordHash.generate('111'),
+  token: '',
+  authCode: '',
   name:{
   	firstname: 'Nikolas',
   	lastname: 'Bram'
@@ -67,6 +73,8 @@ var nikolas = new PUser ({
 var kasper = new PUser ({
   username: 'kasper',
   password: passwordHash.generate('112'),
+  token: '',
+  authCode: '',
   name:{
   	firstname: 'Kasper',
   	lastname: 'Nissen'
@@ -134,7 +142,15 @@ router.post('/authorize', function(req, res) {
 		  if(passwordHash.verify(fPassword, user.password))
 		  	{
 		  		console.log('Verified');
-		  		var url = redirectUrl + '?authCode=' + authCode;
+		  		var current_date = (new Date()).valueOf().toString();
+				var random = Math.random().toString();
+				var gAuthCode = crypto.createHash('sha1').update(current_date + random).digest('hex');
+				user.authCode = gAuthCode;
+				user.save(function (err) {if (err) console.log ('Error on save!')});
+				
+				console.log('AuthCode: ' + gAuthCode);
+
+		  		var url = redirectUrl + '?authCode=' + gAuthCode;
 				_res.status(200);
 				_res.json({redirectUrl: url});
 				_res.end();
@@ -154,28 +170,66 @@ router.post('/authorize', function(req, res) {
 
 router.get('/request-token', function(req, res){
 	var rAuthCode = url.parse(req.url,true).query.authCode;
-	if(rAuthCode === authCode){
-		res.json({token: token, expires: experation});
-	}
-	else {
-		res.status(421);
-		res.json({error: 'AuthCode incorrect'});
-		res.end();
-	}
+
+	var _res = res;
+
+
+	var query = PUser.findOne({'authCode': rAuthCode});
+	query.exec(function(err, user) {
+		if (!err) {
+			var current_date = (new Date()).valueOf().toString();
+			var random = Math.random().toString();
+			var gToken = crypto.createHash('sha1').update(current_date + random).digest('hex');
+			user.token = gToken;
+			user.save(function (err) {if (err) console.log ('Error on save!')});
+			_res.json({token: token});
+		}
+		else {
+			_res.status(421);
+			_res.json({error: 'AuthCode not found'});
+			_res.end();
+		}
+	});
+});
+
+router.get('/me', function(req, res){
+	var rToken = url.parse(req.url,true).query.token;
+	var query = PUser.findOne({'token': rToken});
+	var _res = res;
+	query.exec(function(err, user) {
+		if (!err) {
+			_res.json({
+				user:{
+					firstname: user.name.firstname, 
+					lastname: user.name.lastname
+				}
+			});
+		}
+		else{
+			_res.status(421);
+			_res.json({error: 'token not found'});
+		}
+	});
 });
 
 
 router.get('/token-validation', function(req, res) {
 	var rToken = url.parse(req.url,true).query.token;
-	if(rToken === token)
-	{
-		res.status(200);
-		res.end();
-	}
-	else{
-		res.status(421);
-		res.end();
-	}
+	
+	var _res = res;
+
+	var query = PUser.findOne({'token': rToken});
+	query.exec(function(err, user) {
+		if (!err) {
+			_res.status(200);
+			_res.end();
+		}
+		else {
+			_res.status(421);
+			_res.json({error: 'Token not found'});
+			_res.end();
+		}
+	});
 });
 
 
