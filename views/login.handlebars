@@ -59,6 +59,7 @@ function login(){
   .done(function(data){
     window.opener.location.document.location.href = data.redirectUrl;
     self.close();
+  })
   .fail(function(){alert('Fail');});
 
 }
