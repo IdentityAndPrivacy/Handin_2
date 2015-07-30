@@ -152,30 +152,35 @@ router.post('/authorize', function(req, res) {
 			if(user !== null)
 			{
 				if(passwordHash.verify(fPassword, user.password))
-		  	{
-		  		console.log('Verified');
-		  		var current_date = (new Date()).valueOf().toString();
-				var random = Math.random().toString();
-				var gAuthCode = crypto.createHash('sha1').update(current_date + random).digest('hex');
-				user.authCode = gAuthCode;
-				user.save(function (err) {if (err) console.log ('Error on save!')});
-				
-				console.log('AuthCode: ' + gAuthCode);
+			  	{
+			  		console.log('Verified');
+			  		var current_date = (new Date()).valueOf().toString();
+					var random = Math.random().toString();
+					var gAuthCode = crypto.createHash('sha1').update(current_date + random).digest('hex');
+					user.authCode = gAuthCode;
+					user.save(function (err) {if (err) console.log ('Error on save!')});
+					
+					console.log('AuthCode: ' + gAuthCode);
 
-		  		var url = redirectUrl + '?authCode=' + gAuthCode;
-				_res.status(200);
-				_res.json({redirectUrl: url});
-				_res.end();
-		  	}
-		  	else{
-		  		_res.status(401);
-		  		_res.json({message: 'Wrong password'})
-		  		_res.end();
-		  	}
-		}
+			  		var url = redirectUrl + '?authCode=' + gAuthCode;
+					_res.status(200);
+					_res.json({redirectUrl: url});
+					_res.end();
+			  	}
+			  	else{
+			  		_res.status(401);
+			  		_res.json({message: 'Wrong password'});
+			  		_res.end();
+			  	}
+			}
+			else{
+				_res.status(401);
+			  		_res.json({message: 'Something went wrong. Buhu!'});
+			  		_res.end();
+			}
 		} else {
 			_res.status(401);
-		  	_res.json({message: 'Wrong username'})
+		  	_res.json({message: 'Wrong username'});
 		  	_res.end();
 		}
   });
