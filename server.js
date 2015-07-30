@@ -130,6 +130,7 @@ router.post('/authorize', function(req, res) {
 		if (!err) {
 		  if(passwordHash.verify(fPassword, user.password))
 		  	{
+		  		console.log('Verified');
 		  		var url = redirectUrl + '?authCode=' + authCode;
 				res.status(200);
 				res.json({redirectUrl: url});
