@@ -149,7 +149,9 @@ router.post('/authorize', function(req, res) {
 	query.exec(function(err, user) {
 		if (!err) {
 			console.log(user);
-		  if(passwordHash.verify(fPassword, user.password))
+			if(user !== null)
+			{
+				if(passwordHash.verify(fPassword, user.password))
 		  	{
 		  		console.log('Verified');
 		  		var current_date = (new Date()).valueOf().toString();
@@ -170,6 +172,7 @@ router.post('/authorize', function(req, res) {
 		  		_res.json({message: 'Wrong password'})
 		  		_res.end();
 		  	}
+		}
 		} else {
 			_res.status(401);
 		  	_res.json({message: 'Wrong username'})
