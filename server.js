@@ -97,6 +97,7 @@ var kasper = new PUser ({
 martin.save(function (err) {if (err) console.log ('Error on save!')});
 nikolas.save(function (err) {if (err) console.log ('Error on save!')});
 kasper.save(function (err) {if (err) console.log ('Error on save!')});
+gert.save(function (err) {if (err) console.log ('Error on save!')});
 
 // Setup view engine
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
