@@ -93,11 +93,9 @@ app.set('view engine', 'handlebars');
 
 // Hardcoded stuff
 var clientId = 'A22d2fg224h98k8D7HH21';
-var authCode = 'k5dfD09asYyt9ak8d23as';
+
 var redirectUrl = '';
-var token = 'ii9hD7yw8ao9ereDh34aer93db';
-var username = 'username';
-var password = 'password';
+
 var experation = new Date();
 experation.setHours(experation.getHours()+1);
 
