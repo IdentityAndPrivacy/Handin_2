@@ -192,9 +192,13 @@ router.get('/request-token', function(req, res){
 			var gToken = crypto.createHash('sha1').update(current_date + random).digest('hex');
 			console.log(user);
 			console.log(gToken);
-			user.token = gToken;
-			user.save(function (err) {if (err) console.log ('Error on save!')});
-			_res.json({token: gToken});
+			if(user.token !== null)
+			{
+				user.token = gToken;
+				user.save(function (err) {if (err) console.log ('Error on save!')});
+				_res.json({token: gToken});
+			}
+			
 		}
 		else {
 			_res.status(421);
