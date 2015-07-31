@@ -265,8 +265,6 @@ router.get('/token-validation', function(req, res) {
 	});
 });
 
-
-// REGISTER OUR ROUTES -------------------------------
 app.use('', router);
 
 // START THE SERVER
