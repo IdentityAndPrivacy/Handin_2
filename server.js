@@ -267,7 +267,6 @@ router.get('/token-validation', function(req, res) {
 
 
 // REGISTER OUR ROUTES -------------------------------
-// all of our routes will be prefixed with /api
 app.use('', router);
 
 // START THE SERVER
