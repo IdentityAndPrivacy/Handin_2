@@ -112,7 +112,6 @@ var experation = new Date();
 experation.setHours(experation.getHours()+1);
 
 // configure app to use bodyParser()
-// this will let us get the data from a POST
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
