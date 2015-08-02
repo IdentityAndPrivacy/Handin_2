@@ -56,6 +56,7 @@ var martin = new PUser ({
   	lastname: 'Jensen'
   }
 });
+martin.save(function (err) {if (err) console.log ('Error on save!')});
 
 
 var nikolas = new PUser ({
@@ -68,6 +69,7 @@ var nikolas = new PUser ({
   	lastname: 'Bram'
   }
 });
+nikolas.save(function (err) {if (err) console.log ('Error on save!')});
 
 var gert = new PUser ({
   username: 'gert',
@@ -79,7 +81,7 @@ var gert = new PUser ({
   	lastname: 'Mikkelsen'
   }
 });
-
+gert.save(function (err) {if (err) console.log ('Error on save!')});
 
 var kasper = new PUser ({
   username: 'kasper',
@@ -91,13 +93,9 @@ var kasper = new PUser ({
   	lastname: 'Nissen'
   }
 });
-
-
-// Saving it to the database.  
-martin.save(function (err) {if (err) console.log ('Error on save!')});
-nikolas.save(function (err) {if (err) console.log ('Error on save!')});
 kasper.save(function (err) {if (err) console.log ('Error on save!')});
-gert.save(function (err) {if (err) console.log ('Error on save!')});
+
+
 
 // Setup view engine
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
