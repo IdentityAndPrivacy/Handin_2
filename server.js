@@ -40,11 +40,11 @@ var userSchema = new mongoose.Schema({
 
 var PUser = mongoose.model('Users', userSchema);
 
-PUser.remove({}, function(err) {
-  if (err) {
-    console.log ('error deleting old data.');
-  }
-});
+// PUser.remove({}, function(err) {
+//   if (err) {
+//     console.log ('error deleting old data.');
+//   }
+// });
 
 var martin = new PUser ({
   username: 'martin',
